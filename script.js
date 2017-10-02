@@ -20,8 +20,10 @@ var gameState = 'notStarted', //started //ended
 	};
 
 var newGameElem = document.getElementById('js-newGameElement'),
-	pickElem = document.getElementById('js-playerPickElem'),
-	resultsElem = document.getElementById('js-resultsTableElemnt');
+	pickElem = document.getElementById('js-playerPickElement'),
+	resultsElem = document.getElementById('js-resultsTableElement');
+
+setGameElements();
 
 function setGameElements() {
 	switch(gameState) {
@@ -58,10 +60,6 @@ function newGame() {
 	}
 }
 
-function playerPick(playerPick) {
-	console.log(playerPick);
-}
-
 function getComputerPick() {
 	var possiblePicks = ['rock', 'paper', 'scissors'];
 	return possiblePicks[Math.floor(Math.random()*3)];
@@ -73,14 +71,16 @@ var playerPickElem = document.getElementById('js-playerPick'),
 	computerResultElem = document.getElementById('js-computerResult');
 
 function playerPick(playerPick) {
-	var computerPick = getComputerPick();
+	if(gameState != 'disabled') {
+		var computerPick = getComputerPick();
 
-	playerPickElem.innerHTML = playerPick;
-	computerPickElem.innerHTML = computerPick;
+		playerPickElem.innerHTML = playerPick;
+		computerPickElem.innerHTML = computerPick;
 
-	checkRoundWinner(playerPick, computerPick);
-	setGamePoints();
-	checkGameWinner();
+		checkRoundWinner(playerPick, computerPick);
+		setGamePoints();
+		checkGameWinner();
+	}
 }
 
 function checkRoundWinner(playerPick, computerPick) {
@@ -116,13 +116,13 @@ function setGamePoints() {
 function checkGameWinner() {
 	if(player.score == 10) {
 		playerResultElem.innerHTML = "You win the game!";
-		gameState = 'ended';
-		setGameElements();	
+		gameState = 'disabled';
+		setTimeout(function() {gameState = 'ended'; setGameElements();}, 3000);
 	}
 
 	else if(computer.score == 10) {
 		computerResultElem.innerHTML = "You win the game!";
-		gameState = 'ended';
-		setGameElements();
+		gameState = 'disabled';
+		setTimeout(function() {gameState = 'ended'; setGameElements();}, 3000);
 	}
 }
